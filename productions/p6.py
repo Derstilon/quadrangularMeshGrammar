@@ -28,22 +28,21 @@ class P6():
 
         nodes_in_G = list(isomorphism.keys())
 
-        E_pos = []
+        E_pos_with_3_edges = []
         I_node = None
         I_node_id = None
         for node in nodes_in_G:
             if G.nodes[node]['label'] == 'I':
                 I_node = G.nodes[node]
                 I_node_id = node
-            elif G.nodes[node]['label'] == 'E':
-                E_pos.append(G.nodes[node]['pos'])
+            elif G.nodes[node]['label'] == 'E' and G.degree(node) == 3:
+                E_pos_with_3_edges.append(G.nodes[node]['pos'])
 
         I_node['label'] = 'i'
 
         layer = I_node['layer']
-        pos = sorted(E_pos, key=lambda e: (e[1], e[0]))
-        print(pos)
-        [(x1, y1), (x6, y6), (x2, y2), (x5, y5), (x3, y3), (x4, y4)] = pos
+        pos = sorted(E_pos_with_3_edges, key=lambda e: (e[1], e[0]))
+        [(x1, y1), (x2, y2), (x3, y3), (x4, y4)] = pos
 
         size = G.number_of_nodes()
 
