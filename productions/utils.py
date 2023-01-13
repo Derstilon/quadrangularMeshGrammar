@@ -42,8 +42,6 @@ def find_isomorphisms_for_p13(G_main: Graph, G_to_find: Graph) -> List[Dict]:
         if (E_coeff[0][0] + E_coeff[2][0]) / 2 != E_coeff[1][0] or (E_coeff[0][1] + E_coeff[2][1]) / 2 != E_coeff[1][1]:
             is_correct = False
         for node in E_nodes:
-            if (G_main.nodes[node]['pos'] in [E_coeff[0], E_coeff[2]]) and len(list(G_main.adj[node])) != 2:
-                is_correct = False
             if (G_main.nodes[node]['pos'] == E_coeff[1]) and len(list(G_main.adj[node])) != 4:
                 is_correct = False
         if is_correct:

@@ -56,7 +56,6 @@ class P13:
 
         to_remove_1 = None
         to_remove_2 = None
-        I_to_connect = None
 
         for node in E_nodes:
             adjacency = G.adj[node]
@@ -67,21 +66,29 @@ class P13:
                     if G.nodes[neighbour]['label'] == 'E' and G.nodes[neighbour]['pos'] == E_coeff[1]:
                         to_remove = False
                 if to_remove:
-                    to_remove_1 = node
+                    to_remove_1 = (node, G.nodes[node]['pos'])
                     for neighbour in adjacency:
                         if G.nodes[neighbour]['label'] == 'E' and neighbour in nodes_in_G:
-                            to_remove_2 = neighbour
-                        if G.nodes[neighbour]['label'] == 'I' and neighbour in nodes_in_G:
-                            I_to_connect = neighbour
+                            to_remove_2 = (neighbour, G.nodes[neighbour]['pos'])
                     break
 
-        E_nodes.remove(to_remove_1)
-        E_nodes.remove(to_remove_2)
-        G.remove_node(to_remove_1)
-        G.remove_node(to_remove_2)
+        to_remove_1_neighbours = G.adj[to_remove_1[0]]
+        to_remove_2_neighbours = G.adj[to_remove_2[0]]
+
+        E_nodes.remove(to_remove_1[0])
+        E_nodes.remove(to_remove_2[0])
+        G.remove_node(to_remove_1[0])
+        G.remove_node(to_remove_2[0])
 
         for node in E_nodes:
-            if G.nodes[node]['pos'] != E_coeff[1]:
-                G.add_edge(node, I_to_connect)
+            pos = G.nodes[node]['pos']
+            if pos == to_remove_1[1]:
+                for neighbour in to_remove_1_neighbours:
+                    if neighbour != to_remove_2[0]:
+                        G.add_edge(node, neighbour)
+            elif pos == to_remove_2[1]:
+                for neighbour in to_remove_2_neighbours:
+                    if neighbour != to_remove_1[0]:
+                        G.add_edge(node, neighbour)
 
         return True

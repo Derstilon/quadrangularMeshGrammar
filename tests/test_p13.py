@@ -37,6 +37,8 @@ def get_basic_graph():
 def test_p13_should_apply_basic():
     G = get_basic_graph()
 
+    draw_graph(G)
+
     assert P13.apply(G) is True
 
     assert [(1, {'label': 'E', 'pos': (0, 6), 'layer': 0}),
@@ -52,6 +54,8 @@ def test_p13_should_apply_basic():
     assert {(1, 2), (1, 3), (2, 4), (2, 5), (3, 6), (4, 7), (4, 8), (5, 8), (5, 9), (6, 7), (6, 9), (7, 8), (8, 9)} \
            == set(G.edges)
 
+    draw_graph(G)
+
 
 def test_p13_should_apply_with_added_nodes():
     G = get_basic_graph()
@@ -61,6 +65,8 @@ def test_p13_should_apply_with_added_nodes():
     G.add_edge(12, 3)
     G.add_edge(12, 4)
     G.add_edge(12, 5)
+
+    draw_graph(G)
 
     assert P13.apply(G) is True
 
@@ -78,6 +84,34 @@ def test_p13_should_apply_with_added_nodes():
     assert {(1, 2), (1, 3), (1, 12), (2, 4), (2, 5), (2, 12), (3, 6), (3, 12), (4, 7), (4, 8), (4, 12), (5, 8), (5, 9),
             (5, 12), (6, 7), (6, 9), (7, 8), (8, 9)} == set(G.edges)
 
+    draw_graph(G)
+
+
+def test_p13_should_apply_with_added_nodes_2():
+    G = get_basic_graph()
+    G.add_node(12, label='E', pos=(5, 7), layer=0)
+    G.add_edge(12, 10)
+    G.add_edge(12, 11)
+
+    draw_graph(G)
+
+    assert P13.apply(G) is True
+
+    assert [(1, {'label': 'E', 'pos': (0, 6), 'layer': 0}),
+            (2, {'label': 'i', 'pos': (-1, 5), 'layer': 0}),
+            (3, {'label': 'i', 'pos': (1, 5), 'layer': 0}),
+            (4, {'label': 'I', 'pos': (-2, 3), 'layer': 0}),
+            (5, {'label': 'I', 'pos': (-2, 1), 'layer': 0}),
+            (6, {'label': 'I', 'pos': (2, 2), 'layer': 0}),
+            (7, {'label': 'E', 'pos': (0, 4), 'layer': 0}),
+            (8, {'label': 'E', 'pos': (0, 2), 'layer': 0}),
+            (9, {'label': 'E', 'pos': (0, 0), 'layer': 0}),
+            (12, {'label': 'E', 'pos': (5, 7), 'layer': 0})] == list(G.nodes(data=True))
+
+    assert {(1, 2), (1, 3), (2, 4), (2, 5), (3, 6), (4, 7), (4, 8), (5, 8), (5, 9),
+            (6, 7), (6, 9), (7, 8), (7, 12), (8, 9), (9, 12)} == set(G.edges)
+
+    draw_graph(G)
 
 def test_p13_should_not_apply_with_added_nodes():
     G = get_basic_graph()
@@ -85,6 +119,8 @@ def test_p13_should_not_apply_with_added_nodes():
     G.remove_edge(1, 2)
     G.add_edge(1, 12)
     G.add_edge(12, 2)
+
+    draw_graph(G)
 
     assert P13.apply(G) is False
 
@@ -95,6 +131,8 @@ def test_p13_should_not_apply_node_removed():
 
         G.remove_node(i)
 
+        if i in [2, 6, 10]:
+            draw_graph(G)
         assert P13.apply(G) is False
 
 
@@ -105,6 +143,9 @@ def test_p13_should_not_apply_edge_removed():
         (v1, v2) = list(G.edges)[i]
         G.remove_edge(v1, v2)
 
+        if i in [2, 6, 10]:
+            draw_graph(G)
+
         assert P13.apply(G) is False
 
 
@@ -113,6 +154,9 @@ def test_p13_should_not_apply_node_label_changed():
         G = get_basic_graph()
 
         G.nodes[i]['label'] = 'm'
+
+        if i in [3, 5, 11]:
+            draw_graph(G)
 
         assert P13.apply(G) is False
 
@@ -144,6 +188,8 @@ def test_p13_should_not_apply_wrong_coordinates_1():
     G.add_edge(7, 8)
     G.add_edge(8, 9)
     G.add_edge(10, 11)
+
+    draw_graph(G)
 
     assert P13.apply(G) is False
 
@@ -206,5 +252,7 @@ def test_p13_should_not_apply_wrong_coordinates_3():
     G.add_edge(7, 8)
     G.add_edge(8, 9)
     G.add_edge(10, 11)
+
+    draw_graph(G)
 
     assert P13.apply(G) is False
