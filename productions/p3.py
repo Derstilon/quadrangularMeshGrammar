@@ -1,5 +1,5 @@
 import networkx as nx
-from productions.decorators import first_isomorphism
+from productions.decorators import basic_isomorphism
 from typing import Dict
 import operator
 
@@ -19,7 +19,7 @@ class P3():
     left.add_edges_from([(i, (i%4)+1) for i in range(1, 5)])
 
     @staticmethod
-    @first_isomorphism(left)
+    @basic_isomorphism(left)
     def apply(G: nx.Graph, isomorphism: Dict = None):
         if isomorphism is None:
             print('No isomorphisms found')

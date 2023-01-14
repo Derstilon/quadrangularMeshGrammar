@@ -1,5 +1,5 @@
 import networkx as nx
-from productions.decorators import all_isomorphisms
+from productions.decorators import basic_isomorphism
 from typing import Dict
 
 
@@ -16,7 +16,7 @@ class P2():
     left.add_edge(4, 5)
 
     @staticmethod
-    @all_isomorphisms(left)
+    @basic_isomorphism(left, all_isomorphisms=True)
     def apply(G: nx.Graph, isomorphisms: Dict = None, options: Dict = None):
         if len(isomorphisms) == 0:
             return False

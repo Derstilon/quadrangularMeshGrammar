@@ -1,5 +1,5 @@
 import networkx as nx
-from productions.decorators import first_isomorphism
+from productions.decorators import basic_isomorphism
 from typing import Dict
 
 
@@ -8,7 +8,7 @@ class P1():
     left.add_node(1, label='El')
 
     @staticmethod
-    @first_isomorphism(left)
+    @basic_isomorphism(left)
     def apply(G: nx.Graph, isomorphism: Dict = None):
         if isomorphism is None:
             return False

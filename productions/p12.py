@@ -1,5 +1,5 @@
 import networkx as nx
-from productions.decorators import all_isomorphisms
+from productions.decorators import basic_isomorphism
 from typing import Dict, Optional
 
 import math
@@ -31,7 +31,7 @@ class P12():
     left.add_edges_from([(i, (i % 4) + 1) for i in range(1, 5)])
 
     @staticmethod
-    @all_isomorphisms(left)
+    @basic_isomorphism(left, all_isomorphisms=True)
     def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = None):
         if len(isomorphisms) == 0:
             return False
@@ -104,8 +104,8 @@ class P12_prim():
     left.add_edges_from([(2, 6), (3, 6)])
 
     @staticmethod
-    @all_isomorphisms(left)
-    def apply(G: nx.Graph, isomorphism: Optional[Dict] = None):
+    @basic_isomorphism(left, all_isomorphisms=True)
+    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None):
         if isomorphism is None:
             return False
 
