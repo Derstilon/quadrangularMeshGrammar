@@ -15,5 +15,3 @@ def basic_isomorphism(left_side, all_isomorphisms=False, iso_finder=find_isomorp
 
 def p13_isomorphism(left_side, all_isomorphisms=False):
     return basic_isomorphism(left_side, all_isomorphisms, iso_finder=find_isomorphisms_for_p13)
-
-

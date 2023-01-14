@@ -31,14 +31,25 @@ class P13:
     left.add_edge(10, 11)
 
     @staticmethod
-    @p13_isomorphism(left)
-    def apply(G: nx.Graph, isomorphism: Dict = None):
-        if isomorphism is None:
+    @p13_isomorphism(left, all_isomorphisms=True)
+    def apply(G: nx.Graph, isomorphisms: Dict = None, options: Dict = None):
+        if not isomorphisms or len(isomorphisms) == 0:
             return False
 
+        isomorphism = None
+        if options['apply'] is not None:
+            for i in isomorphisms:
+                if options['apply'](i):
+                    isomorphism = i
+            if isomorphism is None:
+                return False
+        else:
+            isomorphism = isomorphisms[0]
+
         nodes_in_G = list(isomorphism.keys())
-        E_nodes = []
-        E_coeff = set()
+        E_nodes = []        
+        #!!!!!!!!!! changed from E_coeff = set() to E_coeff = [] !!!!!!!!!!!!!!
+        E_coeff = []
 
         for node in nodes_in_G:
             if G.nodes[node]['label'] == 'E':
@@ -50,9 +61,10 @@ class P13:
                         break
                 if not is_connected_to_i:
                     E_nodes.append(node)
-                    E_coeff.add(G.nodes[node]['pos'])
-
-        E_coeff = sorted(list(E_coeff))
+                    E_coeff.append(G.nodes[node]['pos'])
+        
+        #!!!!!!!!!! changed from E_coeff = sorted(E_coeff) to E_coeff = sorted(E_coeff, key=lambda x: (x[0], x[1])) !!!!!!!!!!!!!!
+        E_coeff = sorted(E_coeff, key=lambda x: (x[0], x[1]))
 
         to_remove_1 = None
         to_remove_2 = None

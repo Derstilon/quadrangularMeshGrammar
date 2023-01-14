@@ -22,7 +22,8 @@ def find_isomorphisms_for_p13(G_main: Graph, G_to_find: Graph) -> List[Dict]:
 
     for isomorphism in isomorphisms:
         is_correct = True
-        E_coeff = set()
+        #!!!!!!!!!! changed from E_coeff = set() to E_coeff = [] !!!!!!!!!!!!!!
+        E_coeff = [] 
         E_nodes = []
         nodes_in_graph = list(isomorphism.keys())
         for node in nodes_in_graph:
@@ -34,11 +35,12 @@ def find_isomorphisms_for_p13(G_main: Graph, G_to_find: Graph) -> List[Dict]:
                         is_connected_to_i = True
                         break
                 if not is_connected_to_i:
-                    E_coeff.add(G_main.nodes[node]['pos'])
+                    E_coeff.append(G_main.nodes[node]['pos'])
                     E_nodes.append(node)
         if len(E_coeff) != 3:
             is_correct = False
-        E_coeff = sorted(list(E_coeff))
+        #!!!!!!!!!! changed from E_coeff = sorted(E_coeff) to E_coeff = sorted(E_coeff, key=lambda x: (x[0], x[1])) !!!!!!!!!!!!!!
+        E_coeff = sorted(E_coeff, key=lambda x: (x[0], x[1]))
         if (E_coeff[0][0] + E_coeff[2][0]) / 2 != E_coeff[1][0] or (E_coeff[0][1] + E_coeff[2][1]) / 2 != E_coeff[1][1]:
             is_correct = False
         for node in E_nodes:

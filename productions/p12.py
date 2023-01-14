@@ -33,7 +33,7 @@ class P12():
     @staticmethod
     @basic_isomorphism(left, all_isomorphisms=True)
     def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = None):
-        if len(isomorphisms) == 0:
+        if not isomorphisms or len(isomorphisms) == 0:
             return False
 
         isomorphism = None
@@ -105,10 +105,19 @@ class P12_prim():
 
     @staticmethod
     @basic_isomorphism(left, all_isomorphisms=True)
-    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None):
-        if isomorphism is None:
+    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = None):
+        if not isomorphisms or len(isomorphisms) == 0:
             return False
 
+        isomorphism = None
+        if options['apply'] is not None:
+            for i in isomorphisms:
+                if options['apply'](i):
+                    isomorphism = i
+            if isomorphism is None:
+                return False
+        else:
+            isomorphism = isomorphisms[0]
 
         nodes_in_G = list(isomorphism.keys())
         size = G.number_of_nodes()
