@@ -32,7 +32,7 @@ class P12():
 
     @staticmethod
     @basic_isomorphism(left, all_isomorphisms=True)
-    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = None):
+    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = {}):
         if not isomorphisms or len(isomorphisms) == 0:
             return False
 
@@ -105,7 +105,7 @@ class P12_prim():
 
     @staticmethod
     @basic_isomorphism(left, all_isomorphisms=True)
-    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = None):
+    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = {}):
         if not isomorphisms or len(isomorphisms) == 0:
             return False
 

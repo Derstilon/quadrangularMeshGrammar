@@ -17,7 +17,7 @@ class P2():
 
     @staticmethod
     @basic_isomorphism(left, all_isomorphisms=True)
-    def apply(G: nx.Graph, isomorphisms: Dict = None, options: Dict = None):
+    def apply(G: nx.Graph, isomorphisms: Dict = None, options: Dict = {}):
         if not isomorphisms or len(isomorphisms) == 0:
             return False
 
