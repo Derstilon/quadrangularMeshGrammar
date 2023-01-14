@@ -78,6 +78,32 @@ def test_p13_should_apply_with_added_nodes():
     assert {(1, 2), (1, 3), (1, 12), (2, 4), (2, 5), (2, 12), (3, 6), (3, 12), (4, 7), (4, 8), (4, 12), (5, 8), (5, 9),
             (5, 12), (6, 7), (6, 9), (7, 8), (8, 9)} == set(G.edges)
 
+    draw_graph(G)
+
+
+def test_p13_should_apply_with_added_nodes_2():
+    G = get_basic_graph()
+    G.add_node(12, label='E', pos=(5, 7), layer=0)
+    G.add_edge(12, 10)
+    G.add_edge(12, 11)
+
+    assert P13.apply(G) is True
+
+    assert [(1, {'label': 'E', 'pos': (0, 6), 'layer': 0}),
+            (2, {'label': 'i', 'pos': (-1, 5), 'layer': 0}),
+            (3, {'label': 'i', 'pos': (1, 5), 'layer': 0}),
+            (4, {'label': 'I', 'pos': (-2, 3), 'layer': 0}),
+            (5, {'label': 'I', 'pos': (-2, 1), 'layer': 0}),
+            (6, {'label': 'I', 'pos': (2, 2), 'layer': 0}),
+            (7, {'label': 'E', 'pos': (0, 4), 'layer': 0}),
+            (8, {'label': 'E', 'pos': (0, 2), 'layer': 0}),
+            (9, {'label': 'E', 'pos': (0, 0), 'layer': 0}),
+            (12, {'label': 'E', 'pos': (5, 7), 'layer': 0})] == list(G.nodes(data=True))
+
+    assert {(1, 2), (1, 3), (2, 4), (2, 5), (3, 6), (4, 7), (4, 8), (5, 8), (5, 9),
+            (6, 7), (6, 9), (7, 8), (7, 12), (8, 9), (9, 12)} == set(G.edges)
+
+    draw_graph(G)
 
 def test_p13_should_not_apply_with_added_nodes():
     G = get_basic_graph()
