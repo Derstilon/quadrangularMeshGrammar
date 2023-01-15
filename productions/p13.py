@@ -38,38 +38,39 @@ class P13:
 
         nodes_in_G = list(isomorphism.keys())
         E_nodes = []
-        E_coeff = set()
+        E_coeff = []
 
         for node in nodes_in_G:
             if G.nodes[node]['label'] == 'E':
                 adjacency = G.adj[node]
                 is_connected_to_i = False
                 for neighbour in adjacency:
-                    if G.nodes[neighbour]['label'] == 'i':
+                    if G.nodes[neighbour]['label'] == 'i' and neighbour in nodes_in_G:
                         is_connected_to_i = True
                         break
                 if not is_connected_to_i:
+                    if tuple(G.nodes[node]['pos']) not in E_coeff:
+                        E_coeff.append(tuple(G.nodes[node]['pos']))
                     E_nodes.append(node)
-                    E_coeff.add(G.nodes[node]['pos'])
 
-        E_coeff = sorted(list(E_coeff))
+        E_coeff = sorted(E_coeff, key=lambda x: (x[0], x[1]))
 
         to_remove_1 = None
         to_remove_2 = None
 
         for node in E_nodes:
             adjacency = G.adj[node]
-            pos = G.nodes[node]['pos']
+            pos = tuple(G.nodes[node]['pos'])
             if pos == E_coeff[0] or pos == E_coeff[2]:
                 to_remove = True
                 for neighbour in adjacency:
-                    if G.nodes[neighbour]['label'] == 'E' and G.nodes[neighbour]['pos'] == E_coeff[1]:
+                    if G.nodes[neighbour]['label'] == 'E' and tuple(G.nodes[neighbour]['pos']) == E_coeff[1] and neighbour in E_nodes:
                         to_remove = False
                 if to_remove:
-                    to_remove_1 = (node, G.nodes[node]['pos'])
+                    to_remove_1 = (node, tuple(G.nodes[node]['pos']))
                     for neighbour in adjacency:
                         if G.nodes[neighbour]['label'] == 'E' and neighbour in nodes_in_G:
-                            to_remove_2 = (neighbour, G.nodes[neighbour]['pos'])
+                            to_remove_2 = (neighbour, tuple(G.nodes[neighbour]['pos']))
                     break
 
         to_remove_1_neighbours = G.adj[to_remove_1[0]]
@@ -81,7 +82,7 @@ class P13:
         G.remove_node(to_remove_2[0])
 
         for node in E_nodes:
-            pos = G.nodes[node]['pos']
+            pos = tuple(G.nodes[node]['pos'])
             if pos == to_remove_1[1]:
                 for neighbour in to_remove_1_neighbours:
                     if neighbour != to_remove_2[0]:

@@ -4,6 +4,14 @@ from networkx import Graph
 from networkx.algorithms.isomorphism import GraphMatcher
 
 
+def get_adj_in_isomorphism(G_main: Graph, isomorphism_nodes: list, node: int) -> List[int]:
+    adjacency = list(G_main.adj[node])
+    for neighbour in adjacency:
+        if neighbour not in isomorphism_nodes:
+            adjacency.remove(neighbour)
+    return adjacency
+
+
 def find_isomorphisms(G_main: Graph, G_to_find: Graph) -> List[Dict]:
     GM = GraphMatcher(G_main, G_to_find, node_match=lambda n1, n2: n1['label'] == n2['label'])
 
@@ -22,7 +30,7 @@ def find_isomorphisms_for_p13(G_main: Graph, G_to_find: Graph) -> List[Dict]:
 
     for isomorphism in isomorphisms:
         is_correct = True
-        E_coeff = set()
+        E_coeff = []
         E_nodes = []
         nodes_in_graph = list(isomorphism.keys())
         for node in nodes_in_graph:
@@ -30,19 +38,21 @@ def find_isomorphisms_for_p13(G_main: Graph, G_to_find: Graph) -> List[Dict]:
                 adjacency = G_main.adj[node]
                 is_connected_to_i = False
                 for neighbour in adjacency:
-                    if G_main.nodes[neighbour]['label'] == 'i':
+                    if G_main.nodes[neighbour]['label'] == 'i' and neighbour in nodes_in_graph:
                         is_connected_to_i = True
                         break
                 if not is_connected_to_i:
-                    E_coeff.add(G_main.nodes[node]['pos'])
+                    if tuple(G_main.nodes[node]['pos']) not in E_coeff:
+                        E_coeff.append(tuple(G_main.nodes[node]['pos']))
                     E_nodes.append(node)
         if len(E_coeff) != 3:
             is_correct = False
-        E_coeff = sorted(list(E_coeff))
+        E_coeff = sorted(E_coeff, key=lambda x: (x[0], x[1]))
         if (E_coeff[0][0] + E_coeff[2][0]) / 2 != E_coeff[1][0] or (E_coeff[0][1] + E_coeff[2][1]) / 2 != E_coeff[1][1]:
             is_correct = False
         for node in E_nodes:
-            if (G_main.nodes[node]['pos'] == E_coeff[1]) and len(list(G_main.adj[node])) != 4:
+            if (G_main.nodes[node]['pos'] == E_coeff[1]) and len(
+                    get_adj_in_isomorphism(G_main, nodes_in_graph, node)) != 4:
                 is_correct = False
         if is_correct:
             filtered_isomorphisms_for_p13.append(isomorphism)
