@@ -48,7 +48,7 @@ def main(args):
     print("P12", P12.apply(G, options={"apply": isomorphism_has_node(G, (1.0, 0.0), 2)}))
     print("P2", P2.apply(G, options={"rotate": True, "apply": isomorphism_has_node(G, (1.0, 1.0), 2)}))
     draw_graph(G)
-    print("P13", P13.apply(G))
+    # print("P13", P13.apply(G, options={}))
     print("P13", P13.apply(G, options={"apply": isomorphism_is_rotated(G, 'x', 3)}))
     print("P13", P13.apply(G, options={"apply": isomorphism_is_rotated(G, 'y', 3)}))
     draw_graph(G)

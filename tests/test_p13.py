@@ -1,4 +1,6 @@
 import networkx as nx
+
+from main import isomorphism_is_rotated
 from visualization import draw_graph
 
 from productions import P13
@@ -37,7 +39,7 @@ def get_basic_graph():
 def test_p13_should_apply_basic():
     G = get_basic_graph()
 
-    assert P13.apply(G) is True
+    assert P13.apply(G, options={"apply": isomorphism_is_rotated(G, 'x', 0)}) is True
 
     assert [(1, {'label': 'E', 'pos': (0, 6), 'layer': 0}),
             (2, {'label': 'i', 'pos': (-1, 5), 'layer': 0}),
@@ -62,7 +64,7 @@ def test_p13_should_apply_with_added_nodes():
     G.add_edge(12, 4)
     G.add_edge(12, 5)
 
-    assert P13.apply(G) is True
+    assert P13.apply(G, options={"apply": isomorphism_is_rotated(G, 'x', 0)}) is True
 
     assert [(1, {'label': 'E', 'pos': (0, 6), 'layer': 0}),
             (2, {'label': 'i', 'pos': (-1, 5), 'layer': 0}),
@@ -87,7 +89,7 @@ def test_p13_should_apply_with_added_nodes_2():
     G.add_edge(12, 10)
     G.add_edge(12, 11)
 
-    assert P13.apply(G) is True
+    assert P13.apply(G, options={"apply": isomorphism_is_rotated(G, 'x', 0)}) is True
 
     assert [(1, {'label': 'E', 'pos': (0, 6), 'layer': 0}),
             (2, {'label': 'i', 'pos': (-1, 5), 'layer': 0}),
