@@ -81,8 +81,7 @@ class P9:
             adjacency = G.adj[left]
             G.remove_node(left)
             for adj in adjacency:
-                if G.nodes[adj]['label'] == 'I':
-                    G.add_edge(right, adj)
+                G.add_edge(right, adj)
 
         return True
 
