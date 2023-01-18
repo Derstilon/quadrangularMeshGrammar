@@ -1,4 +1,4 @@
-from productions.utils import find_isomorphisms, find_isomorphisms_for_p13
+from productions.utils import find_isomorphisms, find_isomorphisms_for_p13, find_isomorphisms_for_p15
 
 
 def basic_isomorphism(left_side, all_isomorphisms=False, iso_finder=find_isomorphisms):
@@ -15,3 +15,6 @@ def basic_isomorphism(left_side, all_isomorphisms=False, iso_finder=find_isomorp
 
 def p13_isomorphism(left_side, all_isomorphisms=False):
     return basic_isomorphism(left_side, all_isomorphisms, iso_finder=find_isomorphisms_for_p13)
+
+def p15_isomorphism(left_side, all_isomorphisms=False):
+    return basic_isomorphism(left_side, all_isomorphisms, iso_finder=find_isomorphisms_for_p15)

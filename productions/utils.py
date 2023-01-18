@@ -58,3 +58,39 @@ def find_isomorphisms_for_p13(G_main: Graph, G_to_find: Graph) -> List[Dict]:
             filtered_isomorphisms_for_p13.append(isomorphism)
 
     return filtered_isomorphisms_for_p13
+
+
+def find_isomorphisms_for_p15(G_main: Graph, G_to_find: Graph) -> List[Dict]:
+    isomorphisms = find_isomorphisms(G_main, G_to_find)
+    filtered_isomorphisms_for_p15 = []
+
+    for isomorphism in isomorphisms:
+        is_correct = True
+        E_coeff = []
+        E_nodes = []
+        nodes_in_graph = list(isomorphism.keys())
+        for node in nodes_in_graph:
+            if G_main.nodes[node]['label'] == 'E':
+                adjacency = G_main.adj[node]
+                is_connected_to_i = False
+                for neighbour in adjacency:
+                    if G_main.nodes[neighbour]['label'] == 'i' and neighbour in nodes_in_graph:
+                        is_connected_to_i = True
+                        break
+                if not is_connected_to_i:
+                    if tuple(G_main.nodes[node]['pos']) not in E_coeff:
+                        E_coeff.append(tuple(G_main.nodes[node]['pos']))
+                    E_nodes.append(node)
+        if len(E_coeff) != 2:
+            is_correct = False
+        for node in E_nodes:
+            adjacency = G_main.adj[node]
+            pos = tuple(G_main.nodes[node]['pos'])
+            for neighbour in adjacency:
+                if neighbour in E_nodes and tuple(G_main.nodes[neighbour]['pos']) == pos:
+                    is_correct = False
+                    break
+        if is_correct:
+            filtered_isomorphisms_for_p15.append(isomorphism)
+
+    return filtered_isomorphisms_for_p15

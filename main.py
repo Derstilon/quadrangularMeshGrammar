@@ -1,6 +1,6 @@
 import argparse
 import sys
-from productions import P1, P2, P3, P12, P13
+from productions import P1, P2, P3, P12, P13, P15
 from visualization import draw_graph
 import networkx as nx
 
@@ -32,6 +32,7 @@ def isomorphism_is_rotated(G, axis, expected_layer):
                 elif vertical_pos != G.nodes[node]['pos'][pos_index]:
                     return False
         return True
+    return is_rotated
     
 
 def main(args):
@@ -50,6 +51,9 @@ def main(args):
     draw_graph(G)
     # print("P13", P13.apply(G, options={}))
     print("P13", P13.apply(G, options={"apply": isomorphism_is_rotated(G, 'x', 3)}))
+    print("P13", P13.apply(G, options={"apply": isomorphism_is_rotated(G, 'x', 3)}))
+    draw_graph(G)
+    print("P15", P15.apply(G))
     print("P13", P13.apply(G, options={"apply": isomorphism_is_rotated(G, 'y', 3)}))
     draw_graph(G)
 
