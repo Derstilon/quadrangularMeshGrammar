@@ -1,5 +1,5 @@
 import networkx as nx
-from productions.decorators import first_isomorphism
+from productions.decorators import basic_isomorphism
 from typing import Dict, Optional
 
 import math
@@ -31,10 +31,20 @@ class P12():
     left.add_edges_from([(i, (i % 4) + 1) for i in range(1, 5)])
 
     @staticmethod
-    @first_isomorphism(left)
-    def apply(G: nx.Graph, isomorphism: Optional[Dict] = None):
-        if isomorphism is None:
+    @basic_isomorphism(left, all_isomorphisms=True)
+    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = {}):
+        if not isomorphisms or len(isomorphisms) == 0:
             return False
+
+        isomorphism = None
+        if options['apply'] is not None:
+            for i in isomorphisms:
+                if options['apply'](i):
+                    isomorphism = i
+            if isomorphism is None:
+                return False
+        else:
+            isomorphism = isomorphisms[0]
 
 
         nodes_in_G = list(isomorphism.keys())
@@ -94,11 +104,20 @@ class P12_prim():
     left.add_edges_from([(2, 6), (3, 6)])
 
     @staticmethod
-    @first_isomorphism(left)
-    def apply(G: nx.Graph, isomorphism: Optional[Dict] = None):
-        if isomorphism is None:
+    @basic_isomorphism(left, all_isomorphisms=True)
+    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = {}):
+        if not isomorphisms or len(isomorphisms) == 0:
             return False
 
+        isomorphism = None
+        if options['apply'] is not None:
+            for i in isomorphisms:
+                if options['apply'](i):
+                    isomorphism = i
+            if isomorphism is None:
+                return False
+        else:
+            isomorphism = isomorphisms[0]
 
         nodes_in_G = list(isomorphism.keys())
         size = G.number_of_nodes()
