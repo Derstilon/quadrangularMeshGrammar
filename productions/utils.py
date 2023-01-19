@@ -77,12 +77,15 @@ def find_isomorphisms_for_p15(G_main: Graph, G_to_find: Graph) -> List[Dict]:
                     if G_main.nodes[neighbour]['label'] == 'i' and neighbour in nodes_in_graph:
                         is_connected_to_i = True
                         break
+                    
                 if not is_connected_to_i:
                     if tuple(G_main.nodes[node]['pos']) not in E_coeff:
                         E_coeff.append(tuple(G_main.nodes[node]['pos']))
                     E_nodes.append(node)
+                    
         if len(E_coeff) != 2:
             is_correct = False
+            
         for node in E_nodes:
             adjacency = G_main.adj[node]
             pos = tuple(G_main.nodes[node]['pos'])
@@ -90,6 +93,7 @@ def find_isomorphisms_for_p15(G_main: Graph, G_to_find: Graph) -> List[Dict]:
                 if neighbour in E_nodes and tuple(G_main.nodes[neighbour]['pos']) == pos:
                     is_correct = False
                     break
+                
         if is_correct:
             filtered_isomorphisms_for_p15.append(isomorphism)
 
