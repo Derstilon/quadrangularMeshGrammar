@@ -3,7 +3,7 @@ import copy
 import networkx as nx
 import pytest
 
-from productions.p10 import P10
+from productions import P10
 
 
 @pytest.fixture
