@@ -56,6 +56,8 @@ def draw_graph(graph: nx.Graph, layer=None):
 
     labels = relabel_labels_with_duplicated_pos(labels, visual_pos)
 
+    for k, v in labels.items():
+        labels[k] = f'{v}-{k}'
     nx.draw(graph, pos=visual_pos,
             labels=labels, font_size=12,
             node_size=300, node_color=node_colors)

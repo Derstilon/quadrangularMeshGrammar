@@ -17,7 +17,7 @@ class P2():
 
     @staticmethod
     @basic_isomorphism(left, all_isomorphisms=True)
-    def apply(G: nx.Graph, isomorphisms: Dict = None, options: Dict = {}):
+    def apply(G: nx.Graph, isomorphisms: Dict = None, options: Dict = {"rotate": False, "apply": None}):
         if not isomorphisms or len(isomorphisms) == 0:
             return False
 
@@ -26,10 +26,12 @@ class P2():
             for i in isomorphisms:
                 if options['apply'](i):
                     isomorphism = i
+                    break
             if isomorphism is None:
                 return False
         else:
             isomorphism = isomorphisms[0]
+
 
         nodes_in_G = list(isomorphism.keys())
         E_pos = []
@@ -50,7 +52,7 @@ class P2():
 
         [(x1,y1), (x2,y2), (x3,y3), (x4,y4)] = pos
 
-        size = G.number_of_nodes()
+        size = list(G.nodes)[-1]
 
         G.add_node(size+1, label='I', pos=(((x2+x1)/2 + x3)/2,((y2+y1)/2 + y3)/2), layer=layer+1)
         G.add_node(size+2, label='I', pos=(((x3+x4)/2 + x2)/2,((y3+y4)/2 + y2)/2), layer=layer+1)
