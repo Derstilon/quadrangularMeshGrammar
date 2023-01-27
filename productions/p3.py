@@ -60,7 +60,7 @@ class P3():
             origin_index = prev_E_nodes[0]
             origin_E_node = G.nodes[origin_index]
             edge_vectors = calculate_edge_vectors(origin_index)
-            nodes_count = G.number_of_nodes()
+            nodes_count = max(list(G.nodes))
             if debug:
                 print('prev_E_nodes:', prev_E_nodes)
                 print('prev_I_node: ', prev_I_node)

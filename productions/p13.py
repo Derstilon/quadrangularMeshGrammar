@@ -32,7 +32,7 @@ class P13:
 
     @staticmethod
     @p13_isomorphism(left, all_isomorphisms=True)
-    def apply(G: nx.Graph, isomorphisms: Dict = None, options: Dict = {}):
+    def apply(G: nx.Graph, isomorphisms: Dict = None, options: Dict = {"apply": None}):
         if not isomorphisms or len(isomorphisms) == 0:
             return False
 
@@ -88,14 +88,9 @@ class P13:
 
         E_nodes.remove(to_remove_1[0])
         E_nodes.remove(to_remove_2[0])
-        print(to_remove_1)
-        print(to_remove_2)
         G.remove_node(to_remove_1[0])
         G.remove_node(to_remove_2[0])
 
-        print(len(G.edges), G.edges)
-        print()
-        print(len(G.nodes), G.nodes)
         for node in E_nodes:
             pos = tuple(G.nodes[node]['pos'])
             if pos == to_remove_1[1]:
@@ -106,8 +101,5 @@ class P13:
                 for neighbour in to_remove_2_neighbours:
                     if neighbour != to_remove_1[0]:
                         G.add_edge(node, neighbour)
-        print(len(G.edges), G.edges)
-        print()
-        print(len(G.nodes), G.nodes)
 
         return True

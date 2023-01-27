@@ -3,7 +3,6 @@ import networkx as nx
 import pytest
 
 from productions import P4
-# from visualization import draw_graph
 
 
 def test_p4_horizontal():
@@ -24,6 +23,7 @@ def test_p4_horizontal():
     G.add_edge(5, 4)
     G.add_edge(4, 6)
     G.add_edge(6, 2)
+
     assert True == P4.apply(G)
 
     assert G.nodes[9]['pos'][0] == 1.0

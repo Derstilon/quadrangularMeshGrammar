@@ -22,6 +22,35 @@ def find_isomorphisms(G_main: Graph, G_to_find: Graph) -> List[Dict]:
 
     return filtered_isomorphisms
 
+def are_same_coords(a, b):
+    return a[0] == b[0] and a[1] == b[1]
+
+def isomorphism_has_node(G, coords, expected_layer):
+    def has_node(isomorphism):
+        for a, b in isomorphism.items():
+            for node in [a, b]:
+                if are_same_coords(G.nodes[node]['pos'], coords) and G.nodes[node]['layer'] == expected_layer:
+                    return True
+
+        return False
+    return has_node
+
+def isomorphism_is_rotated(G, axis, expected_layer):
+    pos_index = 0 if axis == 'x' else 1 if axis == 'y' else None
+    def is_rotated(isomorphism):
+        vertical_pos = None
+        if pos_index is None:
+            return False
+        for a, b in isomorphism.items():
+            for node in [a, b]:
+                if G.nodes[node]['layer'] != expected_layer or G.nodes[node]['label'] != 'E':
+                    continue
+                if vertical_pos is None:
+                    vertical_pos = G.nodes[node]['pos'][pos_index]
+                elif vertical_pos != G.nodes[node]['pos'][pos_index]:
+                    return False
+        return True
+    return is_rotated
 
 def find_isomorphisms_for_p9(G_main: Graph, G_to_find: Graph) -> List[Dict]:
     isomorphisms = find_isomorphisms(G_main, G_to_find)
@@ -43,7 +72,6 @@ def find_isomorphisms_for_p9(G_main: Graph, G_to_find: Graph) -> List[Dict]:
                         is_connected_to_i = True
                         break
                 if not is_connected_to_i:
-                    # print(f'{node=}; {G_main.nodes[node]["pos"]}')
                     E_coeff.add(tuple(subgr.nodes[node]['pos']))
                     E_nodes.append(node)
         if len(E_coeff) != 3:
@@ -93,7 +121,6 @@ def find_isomorphisms_for_p10(G_main: Graph, G_to_find: Graph) -> List[Dict]:
                         is_connected_to_i = True
                         break
                 if not is_connected_to_i:
-                    print(f'{node=}; {G_main.nodes[node]["pos"]}')
                     E_coeff.add(G_main.nodes[node]['pos'])
                     E_nodes.append(node)
         if len(E_coeff) != 3:

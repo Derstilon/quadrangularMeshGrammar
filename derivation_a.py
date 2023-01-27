@@ -1,76 +1,77 @@
 import argparse
 import sys
-from productions import P1, P2, P3, P12, P13, P15, P4, P9
-from productions.p15p import P15p
-from visualization import draw_graph, get_layer_subgraph
+
+import matplotlib.pyplot as plt
 import networkx as nx
-from productions.utils import find_isomorphisms
 
-def are_same_coords(a, b):
-    return a[0] == b[0] and a[1] == b[1]
+from productions import P1, P2, P4, P9, P13, P15, P15p
+from productions.utils import isomorphism_has_node, isomorphism_is_rotated
+from visualization import draw_graph
 
-def isomorphism_has_node(G, coords, expected_layer):
-    def has_node(isomorphism):
-        for a, b in isomorphism.items():
-            for node in [a, b]:
-                if are_same_coords(G.nodes[node]['pos'], coords) and G.nodes[node]['layer'] == expected_layer:
-                    return True
-
-        return False
-    return has_node
-
-def isomorphism_is_rotated(G, axis, expected_layer):
-    pos_index = 0 if axis == 'x' else 1 if axis == 'y' else None
-    def is_rotated(isomorphism):
-        vertical_pos = None
-        if pos_index is None:
-            return False
-        for a, b in isomorphism.items():
-            for node in [a, b]:
-                if G.nodes[node]['layer'] != expected_layer or G.nodes[node]['label'] != 'E':
-                    continue
-                if vertical_pos is None:
-                    vertical_pos = G.nodes[node]['pos'][pos_index]
-                elif vertical_pos != G.nodes[node]['pos'][pos_index]:
-                    return False
-        return True
-    return is_rotated
-    
 
 def main(args):
+    print("Step 0/6")
     G = nx.Graph()
     G.add_node(1, label='El', pos=(1/2, 1/2), layer=0)
+    # plt.subplot(231)
     # draw_graph(G)
-    print("P1", P1.apply(G))
-    # draw_graph(G)
-    print("P2 first normal", P2.apply(G))
-    # draw_graph(G)
-    print("P2 rotated", P2.apply(G, options={"rotate": True, "apply": isomorphism_has_node(G, (0.0, 0.0), 2)}))
-    print("P2 second normal", P2.apply(G))
-    # draw_graph(G)
-    print("P13", P13.apply(G, options={"apply": isomorphism_is_rotated(G, 'y', 2)}))
-    draw_graph(G)
-
-    print("P4 ", P4.apply(G))
-    draw_graph(G)
-
-    print("P2 normal 3", P2.apply(G, options={"rotate": False, "apply": isomorphism_has_node(G, (0.0, 0.0), 3)}))
-    print("P9 ", P9.apply(G))
-    print("P2 normal 4", P2.apply(G, options={"rotate": False, "apply": isomorphism_has_node(G, (0.0, 1.0), 3)}))
-    print("P2 roatated 2", P2.apply(G, options={"rotate": True, "apply": isomorphism_has_node(G, (1.0, 0.0), 3)}))
-
-    draw_graph(G)
-
-    print("P9 ", P9.apply(G))
-    print("P15", P15.apply(G))
-    print("P15p", P15p.apply(G))
-    print("P15", P15.apply(G))
-    print("P15p", P15p.apply(G))
-    # print("P9 ", P9.apply(G))
-    # print("P9 ", P9.apply(G))
-
-    draw_graph(G)
     
+    plt.subplots_adjust(left=0.15, right=0.85, bottom=0, top=0.96, wspace=0.32, hspace=0.05)
+
+    print("\nStep 1/6")
+    print("P1", P1.apply(G))
+    ax = plt.subplot(231)
+    ax.set_title('P1')
+    draw_graph(G, None, False)
+    # draw_graph(G)
+
+    print("\nStep 2/6")
+    print("P2 normal", P2.apply(G))
+    ax = plt.subplot(232)
+    ax.set_title('P2')
+    draw_graph(G, None, False)
+    # draw_graph(G)
+
+    print("\nStep 3/6")
+    print("P2 rotated", P2.apply(G, options={"rotate": True, "apply": isomorphism_has_node(G, (0.0, 0.0), 2)}))
+    print("P2 normal", P2.apply(G))
+    ax = plt.subplot(233)
+    ax.set_title('P2, P2')
+    draw_graph(G, None, False)
+    # draw_graph(G)
+
+    print("\nStep 4/6")
+    print("P13", P13.apply(G, options={"apply": isomorphism_is_rotated(G, 'y', 2)}))
+    ax = plt.subplot(234)
+    ax.set_title('P13')
+    draw_graph(G, None, False)
+    # draw_graph(G)
+
+    print("\nStep 5/6")
+    print("P4 ", P4.apply(G))
+    print("P2 normal", P2.apply(G, options={"rotate": False, "apply": isomorphism_has_node(G, (0.0, 0.0), 3)}))
+    print("P2 normal", P2.apply(G, options={"rotate": False, "apply": isomorphism_has_node(G, (0.0, 1.0), 3)}))
+    print("P2 roatated", P2.apply(G, options={"rotate": True, "apply": isomorphism_has_node(G, (1.0, 0.0), 3)}))
+    ax = plt.subplot(235)
+    ax.set_title('P4, P2, P2, P2')
+    draw_graph(G, None, False)
+    # draw_graph(G)
+
+    print("\nStep 6/6")
+    print("P9 ", P9.apply(G))
+    print("P15", P15.apply(G))
+    print("P15p", P15p.apply(G))
+    print("P15", P15.apply(G))
+    print("P15p", P15p.apply(G))
+    # print("P9 ", P9.apply(G))
+    # print("P9 ", P9.apply(G))
+    ax = plt.subplot(236)
+    ax.set_title('P9, P15, P15p, P15, P15p')
+    draw_graph(G, None, False)
+    # draw_graph(G)
+
+    plt.show()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

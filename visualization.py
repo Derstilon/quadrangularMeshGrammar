@@ -42,7 +42,7 @@ def relabel_labels_with_duplicated_pos(labels, positions):
 
     return labels2
 
-def draw_graph(graph: nx.Graph, layer=None):
+def draw_graph(graph: nx.Graph, layer=None, plot=True):
     if layer is not None:
         graph = get_layer_subgraph(graph, layer)
 
@@ -56,9 +56,13 @@ def draw_graph(graph: nx.Graph, layer=None):
 
     labels = relabel_labels_with_duplicated_pos(labels, visual_pos)
 
-    for k, v in labels.items():
-        labels[k] = f'{v}-{k}'
+    # add node id to label
+    # for k, v in labels.items():
+    #     labels[k] = f'{v}-{k}'
+
     nx.draw(graph, pos=visual_pos,
             labels=labels, font_size=12,
             node_size=300, node_color=node_colors)
-    plt.show()
+
+    if plot:
+        plt.show()

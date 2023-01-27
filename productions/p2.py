@@ -52,7 +52,7 @@ class P2():
 
         [(x1,y1), (x2,y2), (x3,y3), (x4,y4)] = pos
 
-        size = list(G.nodes)[-1]
+        size = max(list(G.nodes))
 
         G.add_node(size+1, label='I', pos=(((x2+x1)/2 + x3)/2,((y2+y1)/2 + y3)/2), layer=layer+1)
         G.add_node(size+2, label='I', pos=(((x3+x4)/2 + x2)/2,((y3+y4)/2 + y2)/2), layer=layer+1)

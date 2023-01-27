@@ -18,7 +18,7 @@ class P1():
 
         El_node[1]['label'] = 'el'
         layer = El_node[1]['layer']
-        size = G.number_of_nodes()
+        size = max(list(G.nodes))
 
         G.add_node(size + 1, label='I', pos=(1/2, 1/2), layer=layer+1)
         G.add_edge(size, size+1)

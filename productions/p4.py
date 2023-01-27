@@ -2,7 +2,6 @@ import networkx as nx
 from productions.decorators import basic_isomorphism
 from typing import Dict
 
-# from ..visualization import draw_graph
 
 class P4():
     left = nx.Graph()
@@ -39,9 +38,7 @@ class P4():
 
         # utility functions
         def find_hanging_node(nodes):
-            nonlocal hanging_node
-            nonlocal subgr
-            subgr = G.subgraph(nodes)
+            nonlocal hanging_node, subgr
             for node in subgr:
                 if(len(list(subgr.neighbors(node))) == 2):
                     hanging_node = node
@@ -49,12 +46,10 @@ class P4():
             return False
         
         def hanging_node_predicate(nodes):
-            nonlocal hanging_node
-            nonlocal subgr
+            nonlocal hanging_node, subgr
             subgr = G.subgraph(nodes)
             if find_hanging_node(nodes):
                 neighbors = list(subgr.neighbors(hanging_node))
-                # print(f'lista somsiadow ma {len(neighbors)}')
                 avg_pos = []
                 for neighbor in neighbors:
                     avg_pos.append(subgr.nodes[neighbor]['pos'])
@@ -63,7 +58,6 @@ class P4():
                 hanging_node_pos = subgr.nodes[hanging_node]['pos']
             
                 if all([hanging_node_pos[i] == avg_pos[i] for i in range(2)]):
-                    print('ZWRACA TRUE')
                     return True
             return False 
         
@@ -101,15 +95,14 @@ class P4():
                 
             return edge_vectors
         
-        def assign_variables(debug=True):
+        def assign_variables(debug=False):
             nonlocal origin_E_node, prev_I_node, layer, edge_vectors, nodes_count
             prev_E_nodes, [prev_I_node] = split_based_on_label(list(isomorphism.keys()))
             layer = G.nodes[prev_I_node]['layer']
             origin_index = list(subgr.neighbors(hanging_node))[0]
             origin_E_node = G.nodes[origin_index]
             edge_vectors = calculate_edge_vectors(origin_index)
-            # print(list(G.nodes))
-            nodes_count = list(G.nodes)[-1]
+            nodes_count = max(list(G.nodes))
             if debug:
                 print('prev_E_nodes:', prev_E_nodes)
                 print('prev_I_node: ', prev_I_node)
@@ -191,9 +184,8 @@ class P4():
                 E_node = E_nodes[(k+3)]
                 indecies = [(k+3) + 3*i for i in [-1]]
                 [G.add_edge(E_node, node) for node in [E_nodes[i] for i in indecies]]
-        
-        
-        print('P4 nodes', list(G.nodes))
+
+
         # main function
         if(find_isomorphism_for_predicate(hanging_node_predicate) is not True):
             print('No isomorphism found, aplicability predicate is not satisfied')

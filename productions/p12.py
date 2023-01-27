@@ -32,7 +32,7 @@ class P12():
 
     @staticmethod
     @basic_isomorphism(left, all_isomorphisms=True)
-    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = {}):
+    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = {"apply": None}):
         if not isomorphisms or len(isomorphisms) == 0:
             return False
 
@@ -48,7 +48,7 @@ class P12():
 
 
         nodes_in_G = list(isomorphism.keys())
-        size = G.number_of_nodes()
+        size = max(list(G.nodes))
 
         assert len(isomorphism) == 5, "Expected the isomorphism to have 5 nodes"
 
@@ -105,7 +105,7 @@ class P12_prim():
 
     @staticmethod
     @basic_isomorphism(left, all_isomorphisms=True)
-    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = {}):
+    def apply(G: nx.Graph, isomorphisms: Optional[Dict] = None, options: Dict = {"apply": None}):
         if not isomorphisms or len(isomorphisms) == 0:
             return False
 
@@ -120,7 +120,7 @@ class P12_prim():
             isomorphism = isomorphisms[0]
 
         nodes_in_G = list(isomorphism.keys())
-        size = G.number_of_nodes()
+        size = max(list(G.nodes))
 
         assert len(isomorphism) == 6, "Expected the isomorphism to have 6 nodes"
 

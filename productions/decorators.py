@@ -33,7 +33,8 @@ def first_isomorphism_for_p9(left_side):
             isomorphisms = find_isomorphisms_for_p9(G, left_side)
 
             if not isomorphisms: return apply_fun(G, *args, **kwargs)
-            print(isomorphisms)
+            for iso in isomorphisms:
+                print(list(iso.keys()))
             return apply_fun(G, *args, isomorphisms=isomorphisms, **kwargs)
 
         return inner
