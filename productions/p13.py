@@ -1,5 +1,5 @@
 import networkx as nx
-from productions.decorators import first_isomorphism_for_p13
+from productions.decorators import p13_isomorphism
 from typing import Dict
 
 class P13:
@@ -31,10 +31,20 @@ class P13:
     left.add_edge(10, 11)
 
     @staticmethod
-    @first_isomorphism_for_p13(left)
-    def apply(G: nx.Graph, isomorphism: Dict = None):
-        if isomorphism is None:
+    @p13_isomorphism(left, all_isomorphisms=True)
+    def apply(G: nx.Graph, isomorphisms: Dict = None, options: Dict = {"apply": None}):
+        if not isomorphisms or len(isomorphisms) == 0:
             return False
+
+        isomorphism = None
+        if 'apply' in options and options['apply'] is not None:
+            for i in isomorphisms:
+                if options['apply'](i):
+                    isomorphism = i
+            if isomorphism is None:
+                return False
+        else:
+            isomorphism = isomorphisms[0]
 
         nodes_in_G = list(isomorphism.keys())
         E_nodes = []

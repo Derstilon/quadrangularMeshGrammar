@@ -1,5 +1,5 @@
 import networkx as nx
-from productions.decorators import all_isomorphisms
+from productions.decorators import basic_isomorphism
 from typing import Dict
 
 
@@ -19,7 +19,7 @@ class P4():
 
 
     @staticmethod
-    @all_isomorphisms(left)
+    @basic_isomorphism(left, all_isomorphisms=True)
     def apply(G: nx.Graph, offset=1, isomorphisms: list[Dict] = []):
         if len(isomorphisms) == 0:
             print('No isomorphisms found')
@@ -33,26 +33,29 @@ class P4():
         edge_vectors = [None, None]
         nodes_count = None
         isomorphism = None
-        
+        subgr = None
+
+
         # utility functions
         def find_hanging_node(nodes):
-            nonlocal hanging_node
-            for node in nodes:
-                if(len(list(G.neighbors(node))) == 2):
+            nonlocal hanging_node, subgr
+            for node in subgr:
+                if(len(list(subgr.neighbors(node))) == 2):
                     hanging_node = node
                     return True
             return False
         
         def hanging_node_predicate(nodes):
-            nonlocal hanging_node
+            nonlocal hanging_node, subgr
+            subgr = G.subgraph(nodes)
             if find_hanging_node(nodes):
-                neighbors = list(G.neighbors(hanging_node))
+                neighbors = list(subgr.neighbors(hanging_node))
                 avg_pos = []
                 for neighbor in neighbors:
-                    avg_pos.append(G.nodes[neighbor]['pos'])
+                    avg_pos.append(subgr.nodes[neighbor]['pos'])
 
                 avg_pos = [sum(x)/len(x) for x in zip(*avg_pos)]
-                hanging_node_pos = G.nodes[hanging_node]['pos']
+                hanging_node_pos = subgr.nodes[hanging_node]['pos']
             
                 if all([hanging_node_pos[i] == avg_pos[i] for i in range(2)]):
                     return True
@@ -79,7 +82,8 @@ class P4():
             return E_nodes, I_node
         
         def calculate_edge_vectors(origin_node):
-            neighbor_nodes = [node for node in list(G.neighbors(origin_node)) if G.nodes[node]['label'] == 'E']
+            nonlocal subgr
+            neighbor_nodes = [node for node in list(subgr.neighbors(origin_node)) if subgr.nodes[node]['label'] == 'E']
             edge_vectors = [
                 [node['pos'][j] - G.nodes[origin_node]['pos'][j] for j in range(2)] 
                 for node in [G.nodes[node] for node in neighbor_nodes]
@@ -95,10 +99,10 @@ class P4():
             nonlocal origin_E_node, prev_I_node, layer, edge_vectors, nodes_count
             prev_E_nodes, [prev_I_node] = split_based_on_label(list(isomorphism.keys()))
             layer = G.nodes[prev_I_node]['layer']
-            origin_index = list(G.neighbors(hanging_node))[0]
+            origin_index = list(subgr.neighbors(hanging_node))[0]
             origin_E_node = G.nodes[origin_index]
             edge_vectors = calculate_edge_vectors(origin_index)
-            nodes_count = G.number_of_nodes()
+            nodes_count = max(list(G.nodes))
             if debug:
                 print('prev_E_nodes:', prev_E_nodes)
                 print('prev_I_node: ', prev_I_node)
@@ -180,12 +184,11 @@ class P4():
                 E_node = E_nodes[(k+3)]
                 indecies = [(k+3) + 3*i for i in [-1]]
                 [G.add_edge(E_node, node) for node in [E_nodes[i] for i in indecies]]
-        
-        
-        
+
+
         # main function
         if(find_isomorphism_for_predicate(hanging_node_predicate) is not True):
-            print('No isomorphism found')
+            print('No isomorphism found, aplicability predicate is not satisfied')
             return False
         
         

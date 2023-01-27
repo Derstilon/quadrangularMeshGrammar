@@ -1,5 +1,5 @@
 import networkx as nx
-from productions.decorators import first_isomorphism
+from productions.decorators import basic_isomorphism
 from typing import Dict
 
 
@@ -16,10 +16,22 @@ class P2():
     left.add_edge(4, 5)
 
     @staticmethod
-    @first_isomorphism(left)
-    def apply(G: nx.Graph, isomorphism: Dict = None):
-        if isomorphism is None:
+    @basic_isomorphism(left, all_isomorphisms=True)
+    def apply(G: nx.Graph, isomorphisms: Dict = None, options: Dict = {"rotate": False, "apply": None}):
+        if not isomorphisms or len(isomorphisms) == 0:
             return False
+
+        isomorphism = None
+        if options['apply'] is not None:
+            for i in isomorphisms:
+                if options['apply'](i):
+                    isomorphism = i
+                    break
+            if isomorphism is None:
+                return False
+        else:
+            isomorphism = isomorphisms[0]
+
 
         nodes_in_G = list(isomorphism.keys())
         E_pos = []
@@ -35,9 +47,12 @@ class P2():
         I_node['label'] = 'i'
         layer = I_node['layer']
         pos = sorted(E_pos, key=lambda e: (e[1], e[0]))
+        if options['rotate']:
+            pos[0], pos[1], pos[2], pos[3] = pos[1], pos[3], pos[0], pos[2]
+
         [(x1,y1), (x2,y2), (x3,y3), (x4,y4)] = pos
 
-        size = G.number_of_nodes()
+        size = max(list(G.nodes))
 
         G.add_node(size+1, label='I', pos=(((x2+x1)/2 + x3)/2,((y2+y1)/2 + y3)/2), layer=layer+1)
         G.add_node(size+2, label='I', pos=(((x3+x4)/2 + x2)/2,((y3+y4)/2 + y2)/2), layer=layer+1)

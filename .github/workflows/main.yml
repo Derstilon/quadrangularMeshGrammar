@@ -30,7 +30,8 @@ jobs:
       - name: Run app
         run: |
           export MPLBACKEND=Agg
-          python main.py
+          python derivation_a.py
+          python derivation_b.py
 
       - name: Install test dependencies
         run: pip install pytest

@@ -51,38 +51,44 @@ class P9:
 
     @staticmethod
     @first_isomorphism_for_p9(left)
-    def apply(G: nx.Graph, isomorphism: Dict = None):
-        if isomorphism is None:
+    def apply(G: nx.Graph, isomorphisms = None):
+        if isomorphisms is None:
             return False
+        flaga = True
+        for isomorphism in isomorphisms:
+            nodes_in_G = list(isomorphism.keys())
+            print(f'P9 robi sie na {nodes_in_G}')
+            E_nodes = []
 
-        nodes_in_G = list(isomorphism.keys())
-        E_nodes = []
+            for node in nodes_in_G:
+                # all E nodes
+                if G.nodes[node]['label'] == 'E':
+                    adjacency = G.adj[node]
+                    is_connected_to_i = False
+                    # find if connected to any i
+                    for neighbour in adjacency:
+                        if G.nodes[neighbour]['label'] == 'i':
+                            is_connected_to_i = True
+                            break
+                    # add all valid E nodes
+                    if not is_connected_to_i:
+                        E_nodes.append(node)
 
-        for node in nodes_in_G:
-            # all E nodes
-            if G.nodes[node]['label'] == 'E':
-                adjacency = G.adj[node]
-                is_connected_to_i = False
-                # find if connected to any i
-                for neighbour in adjacency:
-                    if G.nodes[neighbour]['label'] == 'i':
-                        is_connected_to_i = True
-                        break
-                # add all valid E nodes
-                if not is_connected_to_i:
-                    E_nodes.append(node)
+            E_nodes = sorted(E_nodes, key=lambda node: tuple(G.nodes[node]['pos']))
+            E_chunks = P9.chunks(E_nodes, 2)
 
-        E_nodes = sorted(E_nodes, key=lambda node: G.nodes[node]['pos'])
-        E_chunks = P9.chunks(E_nodes, 2)
-
-        for left, right in E_chunks:
-            if G.nodes[left]['pos'] != G.nodes[right]['pos']:
-                continue
-            adjacency = G.adj[left]
-            G.remove_node(left)
-            for adj in adjacency:
-                G.add_edge(right, adj)
-
+            for left, right in E_chunks:
+                if G.nodes[left]['pos'] != G.nodes[right]['pos']:
+                    print('skipuje iteracje')
+                    flaga = False
+                    continue
+                print('wykonuje iteracje')
+                adjacency = G.adj[left]
+                G.remove_node(left)
+                for adj in adjacency:
+                    G.add_edge(right, adj)
+            if flaga:
+                break
         return True
 
 
