@@ -78,6 +78,7 @@ def test_p13_should_apply_with_added_nodes():
     assert {(1, 2), (1, 3), (1, 12), (2, 4), (2, 5), (2, 12), (3, 6), (3, 12), (4, 7), (4, 8), (4, 12), (5, 8), (5, 9),
             (5, 12), (6, 7), (6, 9), (7, 8), (8, 9)} == set(G.edges)
 
+
 def test_p13_should_apply_with_added_nodes_2():
     G = get_basic_graph()
     G.add_node(12, label='E', pos=(5, 7), layer=0)
@@ -99,6 +100,7 @@ def test_p13_should_apply_with_added_nodes_2():
 
     assert {(1, 2), (1, 3), (2, 4), (2, 5), (3, 6), (4, 7), (4, 8), (5, 8), (5, 9),
             (6, 7), (6, 9), (7, 8), (7, 12), (8, 9), (9, 12)} == set(G.edges)
+
 
 def test_p13_should_not_apply_with_added_nodes():
     G = get_basic_graph()
